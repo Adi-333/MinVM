@@ -50,6 +50,26 @@ uint16_t reg[R_COUNT];
 uint16_t mem_read(uint16_t address){
   return memory[address];
 }
+uint16_t sign_extnd(uint16_t x, int bit_count){
+  if ((x >> (bit_count - 1)) & 1) {
+    x |= (0xFFFF << bit_count);
+  }
+  return x;
+}
+
+
+void update_flags(uint16_t r){
+  if(reg[r] == 0){
+    reg[R_COND] = FL_ZRO;
+  }
+  else if(reg[r] >> 15){
+    reg[R_COND] = FL_NEG;
+  }
+  else{
+    reg[R_COND] = FL_POS;
+  }
+}
+
 
 
 int main(int argc, const char* argv[]){
@@ -64,8 +84,27 @@ int main(int argc, const char* argv[]){
     uint16_t op = instr >> 12;
 
     switch(op){
-      case OP_ADD:
+      case OP_ADD:{
+        uint16_t DR = ((instr >> 9) & 0x7);
+        uint16_t SR1 = ((instr >> 6) & 0x7);
+        uint16_t imm_flag = ((instr >> 5) & 0x1);
+
+        if(!imm_flag){
+          uint16_t SR2 = (instr & 0x7);
+          reg[DR] = reg[SR1] + reg[SR2];
+        }
+        else{
+          uint16_t imm5 = sign_extnd((instr & 0x001F), 5);
+          // in the above line we're masking the last 5 bits to get the imm5
+          // and then extending the recieved 5 bit number to 16 bits for calculations ahead;
+          
+          reg[DR] = reg[SR1] + imm5;
+        }
+
+        update_flags(DR);
+
         break;
+      }
       case OP_AND:
         break;
       case OP_NOT:
