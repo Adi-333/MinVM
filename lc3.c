@@ -105,8 +105,25 @@ int main(int argc, const char* argv[]){
 
         break;
       }
-      case OP_AND:
+      case OP_AND:{
+        uint16_t DR = ((instr >> 9) & 0x7);
+        uint16_t SR1 = ((instr >> 6) & 0x7);
+        uint16_t imm_flag = ((instr >> 5 ) & 0x1);
+
+        if(imm_flag){
+          uint16_t imm5 = sign_extnd((instr & 0x001F), 5);
+          reg[DR] = reg[SR1] & imm5;
+        }
+        else{
+          uint16_t SR2 = (instr & 0x7);
+          reg[DR] = reg[SR1] &  reg[SR2];
+        }
+
+        update_flags(DR);
+
+
         break;
+      }
       case OP_NOT:
         break;
       case OP_BR:
