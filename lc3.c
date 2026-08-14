@@ -117,8 +117,16 @@ int main(int argc, const char* argv[]){
         break;
       case OP_LD:
         break;
-      case OP_LDI:
-        break;
+      case OP_LDI:{
+        uint16_t DR = ((instr >> 9) & 0x7);
+        uint16_t PCoffset9 = sign_extnd((instr & 0x01FF), 9);
+
+        uint16_t addr1 = reg[R_PC] + PCoffset9;
+        uint16_t addr2 = mem_read(addr1);
+        reg[DR] = mem_read(addr2);
+
+        update_flags(DR);
+        break;}
       case OP_LDR:
         break;
       case OP_LEA:
