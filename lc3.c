@@ -125,6 +125,11 @@ int main(int argc, const char* argv[]){
         break;
       }
       case OP_NOT:
+        uint16_t DR = ((instr >> 9) & 0x7);
+        uint16_t SR1 = ((instr >> 6) & 0x7);
+
+        reg[DR] = ~(reg[SR1]);
+        update_flags(DR);
         break;
       case OP_BR:
         break;
