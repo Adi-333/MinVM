@@ -25,7 +25,7 @@
 
 # Instructions
 
-### LDI Instruction
+## LDI Instruction
 
 - Format
   - 15-12 (OPCODE), 11-9 (DR), 8-0 (PCoffset9)
@@ -37,36 +37,36 @@
 > 	 	
 > The address we receive is the address to another memory location which contains the actual data we want to use.
 
-### AND Instruction
+## AND Instruction
 
 - Format
   - 15-12 (OPCODE), 11-9 (DR), 8-6 (SR1), 5 (Imm flag):
     - if bit 5 = 0, then `register mode`, 4-3 (unused bits `00`), 2-0 (SR2)
     - if bit 5 = 1, then `immediate mode`, 4-0 (SR2)
 - Usage and working:
-  > It performs bit-wise logical `AND` operation on the received 16-bit numbers.
+  - It performs bit-wise logical `AND` operation on the received 16-bit numbers.
 
-### NOT Instruction
+## NOT Instruction
 
 - Format:
   - `15 - 12` (OPCODE), `11-9` (DR), `8-6` (SR1), `5` (1), `4-0` ( 1 1 1 1 1)
 - Usage and working:
-  Performs the bit-wise logical `NOT` operation on the received 16-bit numbers.
+  - Performs the bit-wise logical `NOT` operation on the received 16-bit numbers.
 
-### BR Instruction
+## BR Instruction
 
 - Format:
   - `15 - 12` ( 0000 ), `11` (n), `10` (z), `9` (p), `8 - 0` (PCOffset9)
 - Usage and working:
-  > This is the heart of conditional statements, jump statements, loops, it allows the code to skip certain parts of the code if necessary. Without it, the program would just be able to run from top-to-bottom, in a straight line.
+  - This is the heart of conditional statements, jump statements, loops, it allows the code to skip certain parts of the code if necessary. Without it, the program would just be able to run from top-to-bottom, in a straight line.
 
-  > In the bits `11`, `10`, and `9`, we have the flags -> `n` ,`z`, and `p` respectively. They act as switches. Once the CPU loads a value into a register, it also sets the corresponding flag (`CPU`'s Flag) (`FL_NEG, FL_ZRO, FL_POS`) while doing so.
+  - In the bits `11`, `10`, and `9`, we have the flags -> `n` ,`z`, and `p` respectively. They act as switches. Once the CPU loads a value into a register, it also sets the corresponding flag (`CPU`'s Flag) (`FL_NEG, FL_ZRO, FL_POS`) while doing so.
   > 
-  > When needed to make a decision such as `if (X == 0)` (say), internally, this would call the BR instruction. What it does is that it compares one of it's internal flags (`n, z, p`) with the CPU's flags (`FL_NEG, FL_ZRO, FL_POS`). If they match, the condition is satisfied and the corresponding `TARGET` (code block inside the curly braces of if(){...} ) is executed.
-
+  - When needed to make a decision such as `if (X == 0)` (say), internally, this would call the BR instruction. What it does is that it compares one of it's internal flags (`n, z, p`) with the CPU's flags (`FL_NEG, FL_ZRO, FL_POS`). If they match, the condition is satisfied and the corresponding `TARGET` (code block inside the curly braces of if(){...} ) is executed.
+>
   > A quick example would be if we wanted to compute `if (A > B)` then:
   > 1. The value of A would be loaded into a register (with it's flag)
   > 2. The value of B would be loaded into a register as well (with it's flag)
   > 3. `A - B` would be computed and the result (say `C`) would set its flag while being written into a register
-  >    - Now if this flag say is `FL_POS` and we ran `BR` with `p` flag (`BRp`), they both would match and return `true`, and thus the if block's program would run.
+  >    - Now if this flag say is `FL_POS` and we ran `BR` with `p` flag (`BRp`), they both would match and return `true`, and thus the `if` block's program would run.
   >    - If the `CPU`'s Flag and `BR`'s flag don't match, the flow won't enter `if`'s block.
