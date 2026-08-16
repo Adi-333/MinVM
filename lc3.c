@@ -132,6 +132,14 @@ int main(int argc, const char* argv[]){
         update_flags(DR);
         break;
       case OP_BR:
+        uint16_t condition_flag_internal = ((instr >> 9) & 0x7);
+        uint16_t PCoffset9 = sign_extnd((instr & 0x01FF), 9);
+
+
+        if(condition_flag_internal & reg[R_COND]){
+          reg[R_PC] += PCoffset9; 
+        }
+        
         break;
       case OP_JMP:
         break;
