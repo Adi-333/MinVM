@@ -2,7 +2,7 @@
 
 # Introduction & Overview
 
-- Building a 16-bit LC-3 Virtual Machine Emulator in C to learn how each component works in a virtual machine. At the end it'll would be able to run simple programs written in assembly.
+- Building a 16-bit LC-3 Virtual Machine in C. At the end it would be able to run simple programs written in assembly.
 
 ###  Note on Reference & Purpose
 > [!NOTE]
@@ -28,7 +28,7 @@
 ## LDI Instruction
 
 - Format
-  - 15-12 (OPCODE), 11-9 (DR), 8-0 (PCoffset9)
+  - `15-12` (OPCODE), `11-9` (DR), `8-0` (PCoffset9)
 
 > [!NOTE]
 > Since we have only 9 bits remaining to specify a location in the RAM (which we cannot do since every memory address in LC3 is 16bit), we use PCoffset.
@@ -40,7 +40,7 @@
 ## AND Instruction
 
 - Format
-  - 15-12 (OPCODE), 11-9 (DR), 8-6 (SR1), 5 (Imm flag):
+  - `15-12` (OPCODE), `11-9` (DR), `8-6` (SR1), `5` (Imm flag):
     - if bit 5 = 0, then `register mode`, 4-3 (unused bits `00`), 2-0 (SR2)
     - if bit 5 = 1, then `immediate mode`, 4-0 (SR2)
 - Usage and working:
@@ -63,6 +63,9 @@
   - In the bits `11`, `10`, and `9`, we have the flags -> `n` ,`z`, and `p` respectively. They act as switches. Once the CPU loads a value into a register, it also sets the corresponding flag (`CPU`'s Flag) (`FL_NEG, FL_ZRO, FL_POS`) while doing so.
   > 
   - When needed to make a decision such as `if (X == 0)` (say), internally, this would call the BR instruction. What it does is that it compares one of it's internal flags (`n, z, p`) with the CPU's flags (`FL_NEG, FL_ZRO, FL_POS`). If they match, the condition is satisfied and the corresponding `TARGET` (code block inside the curly braces of if(){...} ) is executed.
+
+  - One thing to note is that when they do actually match,
+  CPU takes the branch and updates `PC` as `PC = PC + PCoffset9` 
 >
   > A quick example would be if we wanted to compute `if (A > B)` then:
   > 1. The value of A would be loaded into a register (with it's flag)
