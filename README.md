@@ -73,3 +73,13 @@
   > 3. `A - B` would be computed and the result (say `C`) would set its flag while being written into a register
   >    - Now if this flag say is `FL_POS` and we ran `BR` with `p` flag (`BRp`), they both would match and return `true`, and thus the `if` block's program would run.
   >    - If the `CPU`'s Flag and `BR`'s flag don't match, the flow won't enter `if`'s block.
+
+## JMP (and RET) Instruction
+- Format
+  - `15-12` (OPCODE), `11-9` (000), `8-6` (BaseR), `5-0`(00000)
+- Useage and working
+  - Used when there is a need to 'jump' within the program (for eg: `for loop`, `while loop`, `if-else`, etc.).
+
+  - It reads the address written in the base register (`BaseR`) and loads it directly into the `PC` (such that the next FDE cycle starts from this new address).
+
+  - `RET` or return is just a speciliased `JMP`. In LC-3, when function/subroutine is called, the caller's address is stored in `R7`. After the subroutine is finished, JMP is executed again with the caller's address in hardcoded in `R7` -> aka `RET`. 

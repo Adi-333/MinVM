@@ -142,6 +142,8 @@ int main(int argc, const char* argv[]){
         
         break;
       case OP_JMP:
+        uint16_t BaseR = ((instr >> 6) & 0x7);
+        reg[R_PC] = reg[BaseR];
         break;
       case OP_JSR:
         break;
