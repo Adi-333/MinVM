@@ -83,3 +83,14 @@
   - It reads the address written in the base register (`BaseR`) and loads it directly into the `PC` (such that the next FDE cycle starts from this new address).
 
   - `RET` or return is just a speciliased `JMP`. In LC-3, when function/subroutine is called, the caller's address is stored in `R7`. After the subroutine is finished, JMP is executed again with the caller's address in hardcoded in `R7` -> aka `RET`. 
+
+## JSR and JSRR Instruction
+- Format
+  - `15-12` (OPCODE), `11`(1), `10-0` (PCOffset11)
+  - `15-12` (OPCODE), `11`(0), `10-9` (00), `8-6`(BaseR), `5-0` (00000)
+  - (The former format is of JSR and the latter is of JSRR).
+- Useage and working
+  - Like `JMP`, `JSR` is also used for jumping from one code block to another however this is used specifically for functions and subroutines.
+  - Before performing the jump, the current state of `PC` is stored in `R7`.
+  - The address of where to jump is extracted from `BaseR` in case of `JSRR` (When $11^{th}$ bit is 0) (It's also called register mode since the jump happenes directly to the address no matter how far it is from the current `PC`)
+  - In case when the $11^{th}$ bit is 1, it is called relative mode (`JSR`). The address to jump to is calculated by adding the `PCoffset` to the `PC`'s current value. Since the offset is present is the bits `10-0`, we have to sign extend it to 16bits for the addition.

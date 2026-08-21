@@ -146,6 +146,17 @@ int main(int argc, const char* argv[]){
         reg[R_PC] = reg[BaseR];
         break;
       case OP_JSR:
+        reg[R_R7] = reg[R_PC];
+
+        uint16_t switchbit = ((instr >> 11) & 0x1);
+        if(switchbit & 0x1){
+          uint16_t PCoffset11 = sign_extnd((instr & 0x07FF), 11);
+          reg[R_PC] += PCoffset11;
+        }
+        else{
+          uint16_t BaseR = ((instr >> 6) & 0x7);
+          reg[R_ PC] = reg[BaseR]; 
+        }
         break;
       case OP_LD:
         break;
